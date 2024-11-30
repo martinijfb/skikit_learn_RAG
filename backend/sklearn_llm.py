@@ -10,11 +10,11 @@ from langchain.chains import create_history_aware_retriever
 load_dotenv()
 
 
-def run_llm(query: str, chat_history: list):
+def run_llm(query: str, chat_history: list, openai_key: str):
     # Initialize embeddings and retriever
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(api_key=openai_key)
     docs_db = Chroma(persist_directory="../data/sklearn_docs_db", embedding_function=embeddings)
-    chat = ChatOpenAI(verbose=True, temperature=0.0, model="gpt-4o-mini")
+    chat = ChatOpenAI(verbose=True, temperature=0.0, model="gpt-4o-mini", api_key=openai_key)
 
     retriever = docs_db.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
