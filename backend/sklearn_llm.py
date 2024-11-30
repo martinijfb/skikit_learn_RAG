@@ -3,10 +3,10 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from langchain.chains import create_history_aware_retriever
 
-load_dotenv()
+# load_dotenv()
 
 
 def run_llm(query: str, chat_history: list, openai_key: str):
