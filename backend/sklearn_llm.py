@@ -1,18 +1,21 @@
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_chroma import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-# from dotenv import load_dotenv
 from langchain.chains import create_history_aware_retriever
 
-# load_dotenv()
+import os
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).parent.parent.absolute()
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "sklearn_docs_faiss")
 
 
 def run_llm(query: str, chat_history: list, openai_key: str):
     # Initialize embeddings and retriever
     embeddings = OpenAIEmbeddings(api_key=openai_key)
-    docs_db = Chroma(persist_directory="../data/sklearn_docs_db", embedding_function=embeddings)
+    docs_db = FAISS.load_local(DB_PATH, embeddings, allow_dangerous_deserialization=True)
     chat = ChatOpenAI(verbose=True, temperature=0.0, model="gpt-4o-mini", api_key=openai_key)
 
     retriever = docs_db.as_retriever(search_type="similarity", search_kwargs={"k": 3})
